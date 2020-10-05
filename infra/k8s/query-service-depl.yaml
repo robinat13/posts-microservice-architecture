@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: query-service-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: query-service
+  template:
+    metadata:
+      labels:
+        app: query-service
+    spec:
+      containers:
+        - name: query-service
+          image: robinat13/query-service
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: query-service-srv
+spec:
+  type: ClusterIP
+  selector:
+    app: query-service
+  ports:
+    - name: query-service
+      protocol: TCP
+      port: 4002
+      targetPort: 4002
